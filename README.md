@@ -3,6 +3,9 @@
 The end product consists of 3 endpoints: signUp, login and verify email.
 Is based on php7.1, symfony 4.2 and mysql. 
 
+The doc of api can be accesed after start the server in the url "/api/doc".
+
+##### Check the video how to install and run tests https://youtu.be/WEURMUpda00
 
 
 
