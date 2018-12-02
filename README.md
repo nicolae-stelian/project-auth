@@ -7,7 +7,10 @@ Is based on php7.1, symfony 4.2 and mysql.
 
 
 ## Instalation 
-composer.phar install 
+For install execute: 
+```
+    composer.phar install 
+```
 
 
 ## Configuration 
@@ -19,10 +22,10 @@ For example, for user root without password and database with name db_auth we co
 ```
     DATABASE_URL=mysql://root:@127.0.0.1:3306/db_auth
 ``` 
-For create database and the tables we execute:
+For create database and the tables we execute (optionaly we can pass env variables):
 ```
-bin/console doctrine:database:create
-bin/console doctrine:schema:create
+bin/console doctrine:database:create 
+bin/console doctrine:schema:create 
 ``` 
 
 In .env or .env.local you can configure Swiftmailer for sendig mails with activation link. 
@@ -36,6 +39,11 @@ For the dev environment the emails are not send, are saved in /var/log/spooldir.
 
 
 ## Run
+Create the database for environment dev:
+```
+bin/console doctrine:database:create --env=dev 
+bin/console doctrine:schema:create  --env=dev
+```
 In dev environment we run: 
 ```
     bin/console server:run
@@ -52,4 +60,14 @@ We use ant to automatically run some operation like:
   
 All this configuration are in the file build.xml. 
 Configure the path where php, phpcs, phpunit are located.
+For first run the tests we need to create test database and after execute ant:
+```
+    ant db_create 
+    ant 
+```
+ For delete test database:
+ ```
+     ant db_delete 
+     ant 
+ ```
 
