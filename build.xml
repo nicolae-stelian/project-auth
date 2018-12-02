@@ -2,7 +2,7 @@
 
 <project name="Account-password backend system." default="build">
   <!--before run phpunit create testing database and schema, after run test we delete this database -->
-  <target name="build" depends="lint, phpcs, db_create, phpunit, db_delete" />
+  <target name="build" depends="lint, phpcs, phpunit " />
 
   <target name="lint" description="Perform syntax check of source code files">
     <!-- replace this with your php executable/phar location-->

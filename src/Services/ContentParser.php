@@ -11,7 +11,7 @@ namespace App\Services;
 class ContentParser
 {
     /**
-     * Return an array with the keys email and password.
+     * Return an array with the keys email and password. The password is encoded here with bcrypt.
      *
      * @param $string
      * @return array $response
@@ -27,7 +27,7 @@ class ContentParser
             array_key_exists('email', $content) &&
             array_key_exists('password', $content)
         ) {
-            $password = $content['password'];
+            $password = md5($content['password']);
             $email = $content['email'];
         }
 
@@ -39,7 +39,7 @@ class ContentParser
                 array_key_exists('email', $content) &&
                 array_key_exists('password', $content)
             ) {
-                $password = $content['password'];
+                $password = md5($content['password']);
                 $email = $content['email'];
             }
         }

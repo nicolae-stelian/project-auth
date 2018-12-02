@@ -30,35 +30,19 @@ class ApiFunctionalTest extends WebTestCase
         $userId = $this->signUpTest($email, $password);
 
         // check if email is send
-        /** @var MessageDataCollector $mailCollector */
-        $mailCollector = $this->client->getProfile()->getCollector('swiftmailer');
+        $validationUrl = $this->checkIfEmailIsSend();
 
-        $collectedMessages = $mailCollector->getMessages();
-        $message = $collectedMessages[0];
-
-        $this->assertSame(1, $mailCollector->getMessageCount());
-        $this->assertInstanceOf('Swift_Message', $message);
-        $crawler = new Crawler($message->getBody());
-        $validateUrl = $crawler->filterXPath('//body/a')->attr('href');
-        $urlParts = parse_url($validateUrl);
+        // test failed to login when user is not activated
+        $this->loginFailedTest($email, $password);
 
         // test check existing email
         $this->checkEmailTest($email);
 
-        // test failed to login when user is not activated
-        $response = $this->login($email, $password);
-        $this->assertEquals($response->message, "Failed to login.");
-
         // validate url
-        $this->validateUrlTest($urlParts['path']);
+        $this->validateUrlTest($validationUrl);
 
         // test successfully login when user  activated
-        $response = $this->login($email, $password);
-
-        $this->assertEquals($response->id, $userId);
-        $this->assertEquals($response->email, $email);
-
-
+        $this->loginSuccessfullyTest($email, $password, $userId);
    }
 
    public function testFailedLoginWhenEmailDoNotExists()
@@ -111,14 +95,28 @@ class ApiFunctionalTest extends WebTestCase
         $this->assertEquals($response->email, $email);
     }
 
-    protected function login($email, $password)
+    protected function loginFailedTest($email, $password)
     {
         $url = "/api/v1/login";
         $content = json_encode(['email' => $email, 'password' => $password]);
         $this->client->request('POST', $url, [], [], ['CONTENT_TYPE' => 'application/json'], $content);
 
         $response = json_decode($this->client->getResponse()->getContent());
-        return $response;
+
+        $this->assertEquals($response->message, "Failed to login.");
+    }
+
+    protected function loginSuccessfullyTest($email, $password, $userId)
+    {
+        $url = "/api/v1/login";
+        $content = json_encode(['email' => $email, 'password' => $password]);
+        $this->client->request('POST', $url, [], [], ['CONTENT_TYPE' => 'application/json'], $content);
+
+        $response = json_decode($this->client->getResponse()->getContent());
+
+        $this->assertEquals($response->id, $userId);
+        $this->assertEquals($response->email, $email);
+
     }
 
     protected function validateUrlTest($url)
@@ -127,5 +125,29 @@ class ApiFunctionalTest extends WebTestCase
         $response = $this->client->getResponse()->getContent();
 
         $this->assertContains('Activation successfully', $response);
+    }
+
+    /**
+     * Return validation url from email.
+     *
+     * @return string $validationUrl
+     */
+    protected function checkIfEmailIsSend()
+    {
+        /** @var MessageDataCollector $mailCollector */
+        $mailCollector = $this->client->getProfile()->getCollector('swiftmailer');
+
+        $collectedMessages = $mailCollector->getMessages();
+        $message = $collectedMessages[0];
+
+        $this->assertSame(1, $mailCollector->getMessageCount());
+        $this->assertInstanceOf('Swift_Message', $message);
+
+        // create a dom crawler from email message
+        $crawler = new Crawler($message->getBody());
+        $validateUrl = $crawler->filterXPath('//body/a')->attr('href');
+        $urlParts = parse_url($validateUrl);
+
+        return $urlParts['path'];
     }
 }

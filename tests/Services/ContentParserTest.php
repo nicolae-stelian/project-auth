@@ -26,11 +26,11 @@ class ContentParserTest extends TestCase
         return [
             "url" => [
                 "email=stelu26@gmail.com&password=123456",
-                ['email' => 'stelu26@gmail.com', 'password' => '123456']
+                ['email' => 'stelu26@gmail.com', 'password' => md5('123456')]
             ],
             "json" => [
                 '{"email":"stelu26@gmail.com","password":"123456"}',
-                ['email' => 'stelu26@gmail.com', 'password' => '123456']
+                ['email' => 'stelu26@gmail.com', 'password' => md5('123456')]
             ],
         ];
     }
