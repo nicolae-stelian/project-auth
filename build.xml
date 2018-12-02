@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Account-password backend system." default="build">
+  <target name="build" depends="lint, phpcs, phpunit" />
+
+  <target name="lint" description="Perform syntax check of source code files">
+    <!-- replace this with your php executable/phar location-->
+    <apply executable="/usr/bin/php" failonerror="true">
+      <arg value="-l" />
+      <fileset dir="${basedir}/src">
+        <include name="**/*.php" />
+        <modified />
+      </fileset>
+    </apply>
+  </target>
+
+  <target name="phpcs" description="Check code style">
+    <!-- replace this with your phpcs executable/phar location-->
+    <exec executable="/usr/local/bin/phpcs.phar" failonerror="true">
+      <arg value="-n" />
+      <arg value="--extensions=php" />
+      <arg value="--error-severity=1" />
+      <arg value="--standard=PSR2" />
+      <arg path="${basedir}/src" />
+    </exec>
+  </target>
+
+  <target name="phpunit" description="Run phpunit tests">
+    <!-- replace this with your phpunit executable/phar location-->
+    <exec executable="/usr/local/bin/phpunit-7.phar" failonerror="true">
+      <arg line="--verbose" />
+      <arg value="tests/" />
+    </exec>
+  </target>
+
+</project>
