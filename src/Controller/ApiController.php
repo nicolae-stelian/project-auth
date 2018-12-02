@@ -22,15 +22,26 @@ class ApiController extends AbstractController
 {
     /**
      * Check if the email exists.
+     * @SWG\Parameter(
+     *     name="email",
+     *     in="query",
+     *     type="string",
+     *     description="The email "
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="If email already exists"
+     * )
      *
-     * @Route("/check/{email}", name="check_email", methods="GET")
+     * @Route("/check", name="check_email", methods="GET")
      *
-     * @param string $email
+     * @param Request $request
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function checkEmail($email, UserRepository $userRepository, UserSerializer $serializer)
+    public function checkEmail(Request $request, UserRepository $userRepository, UserSerializer $serializer)
     {
+        $email = $request->query->get('email');
         // find the user in database
         $user = $userRepository->findOneBy(['email' => $email]);
         if (!$user) { // if the user do not exists, response with 404
