@@ -21,3 +21,5 @@
 ToDo.txt
 # phpstorm files  #
 .idea/*
+# ignore phpunit.phar if is in the project dir
+phpunit.phar

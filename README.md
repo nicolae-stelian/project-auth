@@ -24,11 +24,22 @@ For create database and the tables we execute:
 bin/console doctrine:database:create
 bin/console doctrine:schema:create
 ``` 
-  
+
+In .env or .env.local you can configure Swiftmailer for sendig mails with activation link. 
+```
+# For Gmail as a transport, use: "gmail://username:password@localhost"
+# For a generic SMTP server, use: "smtp://localhost:25?encryption=&auth_mode="
+# Delivery is disabled by default via "null://localhost"
+MAILER_URL=null://localhost
+```  
+For the dev environment the emails are not send, are saved in /var/log/spooldir.
 
 
-## Run 
-bin/console server:run
+## Run
+In dev environment we run: 
+```
+    bin/console server:run
+```
 
 
 ## Tests

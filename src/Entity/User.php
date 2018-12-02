@@ -31,8 +31,11 @@ class User
      */
     private $password;
 
-    public function __construct($email, $password, $active)
+    public function __construct($email, $password, $active = false)
     {
+        $this->email = $email;
+        $this->password = $password;
+        $this->active = $active;
     }
 
     public function getId(): ?int

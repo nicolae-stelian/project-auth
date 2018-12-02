@@ -43,6 +43,7 @@ class Link
         $this->link = substr(str_replace(['+', '/', '='], '', $randomString), 0, 32);
 
         $this->user_id = $userId;
+        $this->created = new \DateTime();
     }
 
     public function getId(): ?int

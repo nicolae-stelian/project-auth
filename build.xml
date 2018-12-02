@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <project name="Account-password backend system." default="build">
-  <target name="build" depends="lint, phpcs, phpunit" />
+  <!--before run phpunit create testing database and schema, after run test we delete this database -->
+  <target name="build" depends="lint, phpcs, db_create, phpunit, db_delete" />
 
   <target name="lint" description="Perform syntax check of source code files">
     <!-- replace this with your php executable/phar location-->
@@ -31,6 +32,30 @@
       <arg line="--verbose" />
       <arg value="tests/" />
     </exec>
+  </target>
+
+  <target name="db_create" description="Create testing database and schema">
+    <exec executable="php" failonerror="true">
+      <arg value="bin/console" />
+      <arg value="doctrine:database:create" />
+      <arg value="--env=test" />
+    </exec>
+
+    <exec executable="php" failonerror="true">
+      <arg value="bin/console" />
+      <arg value="doctrine:schema:create" />
+      <arg value="--env=test" />
+    </exec>
+  </target>
+
+  <target name="db_delete" description="Drop testing database">
+    <exec executable="php" failonerror="true">
+      <arg value="bin/console" />
+      <arg value="doctrine:database:drop" />
+      <arg value="--force" />
+      <arg value="--env=test" />
+    </exec>
+
   </target>
 
 </project>

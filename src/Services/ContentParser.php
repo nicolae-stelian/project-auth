@@ -2,8 +2,20 @@
 
 namespace App\Services;
 
+/**
+ * Parse content that is send in body request. Some time is url (email=name@example.com&password=1234) or json encoded.
+ *
+ * Class ContentParser
+ * @package App\Services
+ */
 class ContentParser
 {
+    /**
+     * Return an array with the keys email and password.
+     *
+     * @param $string
+     * @return array $response
+     */
     public function parse($string)
     {
         $password = '';
